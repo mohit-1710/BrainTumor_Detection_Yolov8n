@@ -5,9 +5,10 @@ This project focuses on the detection of brain tumors from MRI images using the 
 
 ## **Project Motivation**
 
-This project was undertaken as a part of the entrance task for the **Drone Club of Scaler School of Technology**. The club emphasizes innovative solutions, and this challenge presented an opportunity to apply deep learning to a significant real-world problem: brain tumor detection in MRI scans.
+This project was undertaken as a part of a **Drone Lab assignment** at the **Scaler School of Technology**. The lab emphasizes innovative solutions, and this challenge presented an opportunity to apply deep learning to a significant real-world problem: brain tumor detection in MRI scans.
 
-Brain tumors can be life-threatening if not detected early. Manual analysis of MRI images by radiologists is time-consuming and prone to human error. By utilizing deep learning, we can assist in speeding up the detection process while improving accuracy. This project represents both a technical challenge and an opportunity to contribute to healthcare advancements, which aligns with the Drone Club’s focus on innovation and impact.
+Brain tumors can be life-threatening if not detected early. Manual analysis of MRI images by radiologists is time-consuming and prone to human error. By utilizing deep learning, we can assist in speeding up the detection process while improving accuracy. This project represents both a technical challenge and an opportunity to contribute to healthcare advancements, which aligns with the Drone Lab’s focus on innovation and impact.
+
 
 ## **Data Source**
 The dataset used in this project was sourced from **Kaggle**, containing **19,000 MRI brain images** annotated for tumor detection. The dataset was structured to work with the YOLOv8n model.
