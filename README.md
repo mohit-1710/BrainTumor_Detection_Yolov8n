@@ -3,6 +3,16 @@
 ## **Overview**
 This project focuses on the detection of brain tumors from MRI images using the YOLOv8n (You Only Look Once) object detection model. The aim is to provide a reliable and efficient method for identifying tumors in MRI scans, aiding early diagnosis and treatment. The model was trained on a dataset of 19,000 images and achieves high performance in precision and accuracy. An interactive interface allows users to upload images for real-time tumor detection.
 
+#  **🚨 Project Video Demo 🚨** 
+
+---
+
+### 🎥 Watch the full video walkthrough of the project [**here**](https://youtu.be/IJrxTjdyvDg?si=Qx0OkZxxOmfUgvl7). 🎬
+
+---
+
+
+
 ## **Project Motivation**
 
 This project was undertaken as a part of a **Drone Lab assignment** at the **Scaler School of Technology**. The lab emphasizes innovative solutions, and this challenge presented an opportunity to apply deep learning to a significant real-world problem: brain tumor detection in MRI scans.
