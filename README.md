@@ -105,38 +105,88 @@ A user-friendly upload button was created, allowing users to upload their own MR
 ### Upload Functionality:
 
 ```python
-import ipywidgets as widgets
-from IPython.display import display
-from ultralytics import YOLO
 import cv2
+import matplotlib.pyplot as plt
+from ultralytics import YOLO
+import numpy as np
+from tkinter import Tk, filedialog, Button, Label
 
-# Load trained YOLOv8 model
-model = YOLO('best.pt')
+# Load the pre-trained YOLO model globally
+model = YOLO(r'C:\Users\Mohit\BrainTumor_NewYolov8n\runs\detect\train\weights\best.pt')  # Ensure the correct path to your model
 
-# Function to detect tumor
-def detect(image_path):
-    img = cv2.imread(image_path)
-    results = model.predict(img)
-    for result in results:
-        if result.boxes:
-            for box in result.boxes.xyxy:
-                x1, y1, x2, y2 = [int(b) for b in box]
-                confidence = result.boxes.conf[0].item()
-                cv2.rectangle(img, (x1, y1), (x2, y2), (255, 0, 0), 2)
-                cv2.putText(img, f"Confidence: {confidence:.2f}", (x1, y1 - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.9, (255, 0, 0), 2)
-    cv2.imshow('Detected Tumor', img)
+# Function to perform inference on the uploaded image
+def detect_tumor(image_path):
+    print(f"Processing the image: {image_path}")
+    
+    # Read image using OpenCV
+    image = cv2.imread(image_path)
+    
+    # Perform inference using YOLOv8 model
+    results = model(image)
+    print("Inference completed.")
 
-# File upload widget
-upload_btn = widgets.FileUpload()
+    # Get detections (bounding boxes and confidence)
+    detections = results[0].boxes.xyxy.cpu().numpy()  # Bounding boxes
+    confidences = results[0].boxes.conf.cpu().numpy()  # Confidence scores
 
-def on_upload_change(change):
-    for filename, file_info in upload_btn.value.items():
-        with open(filename, 'wb') as f:
-            f.write(file_info['content'])
-        detect(filename)
+    # Check for detections
+    if len(detections) == 0:
+        print("No tumor detected.")
+        status_label.config(text="No tumor detected.")
+        return
 
-upload_btn.observe(on_upload_change, names='value')
-display(upload_btn)
+    # Draw bounding boxes and display confidence
+    print("Tumor(s) detected. Drawing bounding boxes...")
+    for i in range(len(detections)):
+        box = detections[i]
+        confidence = confidences[i]
+        if confidence >= 0.25:  # You can adjust this threshold if needed
+            x1, y1, x2, y2 = map(int, box)  # Convert to integer coordinates
+            cv2.rectangle(image, (x1, y1), (x2, y2), (0, 255, 0), 2)  # Draw bounding box
+            label = f"Conf: {confidence:.2f}"
+            cv2.putText(image, label, (x1, y1 - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 87, 51), 1)  # Display confidence
+
+    # Convert image from BGR to RGB for displaying
+    detected_image_rgb = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
+
+    # Display the image with bounding boxes and confidence
+    plt.figure(figsize=(8, 8))
+    plt.imshow(detected_image_rgb)
+    plt.axis('off')
+    plt.title("Detected Tumor(s)")
+    plt.show()
+    
+    print("Image processed successfully!")
+    status_label.config(text="Tumor detection completed.")
+
+# Function to select an image using a file dialog
+def upload_image():
+    # Open a file dialog and return the selected file path
+    file_path = filedialog.askopenfilename(title="Select an Image", filetypes=[("Image Files", "*.jpg;*.jpeg;*.png")])
+    if file_path:
+        print("Image selected for processing.")
+        status_label.config(text="Image selected for processing.")
+        detect_tumor(file_path)
+    else:
+        print("No image selected.")
+        status_label.config(text="No image selected.")
+
+# Initialize the main Tkinter window
+root = Tk()
+root.title("Brain Tumor Detection")
+root.geometry("300x150")  # Set the size of the window
+
+# Create an upload button
+upload_button = Button(root, text="Upload Image", command=upload_image, width=20, height=2)
+upload_button.pack(pady=20)
+
+# Create a status label
+status_label = Label(root, text="Upload an image to detect brain tumors.", wraplength=250)
+status_label.pack(pady=10)
+
+# Run the Tkinter event loop
+root.mainloop()
+
 ```
 
 ### How It Works:
